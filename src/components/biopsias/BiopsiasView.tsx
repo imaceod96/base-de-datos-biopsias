@@ -30,7 +30,11 @@ import {
 import { BiopsiaForm } from './BiopsiaForm';
 import { BiopsiaDetail } from './BiopsiaDetail';
 
-export const BiopsiasView: React.FC = () => {
+interface BiopsiasViewProps {
+  onNewBiopsia: () => void;
+}
+
+export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
   const { 
     biopsias, 
     viales, 
@@ -141,12 +145,9 @@ export const BiopsiasView: React.FC = () => {
             <FilterIcon className="mr-2 h-4 w-4" />
             Filtros
           </Button>
-          <Button 
-            variant="secondary" 
-            onClick={() => {
-              setEditingBiopsiaId(null);
-              // Abrir formulario para nueva biopsia
-            }}
+          <Button
+            variant="secondary"
+            onClick={onNewBiopsia}
           >
             <Plus className="mr-2 h-4 w-4" />
             Nueva biopsia

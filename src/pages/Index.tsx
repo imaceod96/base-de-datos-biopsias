@@ -36,7 +36,10 @@ const Index = () => {
   const renderView = () => {
     switch (currentView) {
       case 'biopsias':
-        return <BiopsiasView onNewBiopsia={() => { setEditingBiopsiaId(null); setCurrentView('biopsia-form'); }} />;
+        return <BiopsiasView onNewBiopsia={() => {
+          setEditingBiopsiaId(null);
+          setCurrentView('biopsia-form');
+        }} />;
       case 'biopsia-form':
         return <BiopsiaForm biopsiaId={editingBiopsiaId} onSave={() => { setEditingBiopsiaId(null); setCurrentView('biopsias'); }} onCancel={() => { setEditingBiopsiaId(null); setCurrentView('biopsias'); }} />;
       case 'biopsia-detail':
