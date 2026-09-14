@@ -28,7 +28,7 @@ interface BiopsiaFormProps {
 }
 
 export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onCancel }) => {
-  const { biopsias, viales, createBiopsia, updateBiopsia, createVial, updateVial, deleteVial, addHistorialEntry, session } = useAppContext();
+  const { biopsias, viales, createBiopsia, updateBiopsia, createVial, deleteVial, addHistorialEntry, session, updateVial: contextUpdateVial } = useAppContext();
   const { toast } = useToast();
   
   const isEditing = biopsiaId !== null;
@@ -228,7 +228,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
     setVialesList([...vialesList, { identificador: '', tipo: 'tumoral' }]);
   };
 
-  const updateVial = (index: number, field: 'identificador' | 'tipo', value: string) => {
+  const updateVialField = (index: number, field: 'identificador' | 'tipo', value: string) => {
     const newViales = [...vialesList];
     newViales[index] = { ...newViales[index], [field]: value };
     setVialesList(newViales);
@@ -407,7 +407,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
                       <Input
                         id={`vial-${index}-identificador`}
                         value={vial.identificador}
-                        onChange={(e) => updateVial(index, 'identificador', e.target.value)}
+                        onChange={(e) => updateVialField(index, 'identificador', e.target.value)}
                         placeholder="V-001"
                       />
                     </div>
@@ -415,7 +415,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
                       <Label htmlFor={`vial-${index}-tipo`}>Tipo</Label>
                       <Select 
                         value={vial.tipo} 
-                        onValueChange={(value) => updateVial(index, 'tipo', value as VialType)}
+                        onValueChange={(value) => updateVialField(index, 'tipo', value as VialType)}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccione un tipo" />
