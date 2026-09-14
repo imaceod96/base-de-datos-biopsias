@@ -5,18 +5,27 @@ import { Biopsia, Vial } from '@/types';
 import * as XLSX from 'xlsx';
 import { DateUtils } from './crypto';
 
+export interface ExportFilters {
+  anio?: number | null;
+  localizacion?: string | null;
+}
+
 // Genera nombre de archivo con fecha
-function generateFileName(prefix: string): string {
+function generateFileName(prefix: string, filters: ExportFilters = {}): string {
   const now = new Date();
   const dateStr = now.toISOString().split('T')[0]; // YYYY-MM-DD
-  return `${prefix}_${dateStr}.xlsx`;
+  const parts = [prefix];
+  if (filters.anio) parts.push(filters.anio.toString());
+  if (filters.localizacion) parts.push(filters.localizacion);
+  parts.push(dateStr);
+  return `${parts.join('_')}.xlsx`;
 }
 
 // Crea hoja de Biopsias como CSV
-function createBiopsiasSheet(biopsias: Biopsia[]): string[][] {
+function createBiopsiasSheet(biopsias: Biopsia[], viales: Vial[]): string[][] {
   const headers = [
     'Número', 'Localización', 'Localización Específica', 'Diagnóstico',
-    'Año', 'Sexo', 'Tanque', 'Rack', 'Caja', 'Posición', 'Nº de Viales'
+    'Año', 'Sexo', 'Ubicación', 'Nº de Viales'
   ];
 
   const rows = biopsias.map((b) => [
@@ -26,11 +35,8 @@ function createBiopsiasSheet(biopsias: Biopsia[]): string[][] {
     b.diagnostico,
     b.anio_extraccion.toString(),
     b.sexo,
-    b.tanque,
-    b.rack,
-    b.caja,
-    b.posicion,
-    '' // Se llenará en el componente principal
+    b.ubicacion,
+    viales.filter(v => v.biopsia_id === b.id).length.toString()
   ]);
 
   return [headers, ...rows];
@@ -53,23 +59,14 @@ function createVialesSheet(viales: Vial[]): string[][] {
 export function exportToExcel(
   biopsias: Biopsia[],
   viales: Vial[],
-  categoria: string = 'todas'
+  filters: ExportFilters = {}
 ): void {
   try {
-    // Filtrar biopsias por categoría si es necesario
-    const biopsiasFiltradas = categoria === 'todas'
-      ? biopsias
-      : biopsias.filter((b) => b.localizacion === categoria);
-
-    const vialesFiltrados = categoria === 'todas'
-      ? viales
-      : viales.filter((v) => {
-          const biopsia = biopsiasFiltradas.find((b) => b.id === v.biopsia_id);
-          return biopsia ? biopsiasFiltradas.includes(biopsia) : false;
-        });
+    const biopsiasFiltradas = filterBiopsias(biopsias, filters);
+    const vialesFiltrados = filterViales(viales, biopsiasFiltradas);
 
     // Crear hoja de Biopsias
-    const biopsiasSheet = createBiopsiasSheet(biopsiasFiltradas);
+        const biopsiasSheet = createBiopsiasSheet(biopsiasFiltradas, vialesFiltrados);
     // Crear hoja de Viales
     const vialesSheet = createVialesSheet(vialesFiltrados);
 
@@ -82,7 +79,7 @@ export function exportToExcel(
     XLSX.utils.book_append_sheet(workbook, vialesWs, 'Viales');
 
     // Descargar archivo
-    XLSX.writeFile(workbook, generateFileName(`Biopsias_${categoria === 'todas' ? 'Completo' : categoria}`));
+    XLSX.writeFile(workbook, generateFileName('Biopsias', filters));
   } catch (error) {
     console.error('Error exportando a Excel:', error);
     throw error;
@@ -93,31 +90,47 @@ export function exportToExcel(
 export function exportToCSV(
   biopsias: Biopsia[],
   viales: Vial[],
-  categoria: string = 'todas'
+  filters: ExportFilters = {}
 ): void {
   try {
-    const biopsiasFiltradas = categoria === 'todas'
-      ? biopsias
-      : biopsias.filter((b) => b.localizacion === categoria);
-
-    const vialesFiltrados = categoria === 'todas'
-      ? viales
-      : viales.filter((v) => {
-          const biopsia = biopsiasFiltradas.find((b) => b.id === v.biopsia_id);
-          return biopsia ? biopsiasFiltradas.includes(biopsia) : false;
-        });
+    const biopsiasFiltradas = filterBiopsias(biopsias, filters);
+    const vialesFiltrados = filterViales(viales, biopsiasFiltradas);
 
     // Crear CSV de biopsias
-    const biopsiasCsv = createCsvFromData(createBiopsiasSheet(biopsiasFiltradas));
+    const biopsiasCsv = createCsvFromData(createBiopsiasSheet(biopsiasFiltradas, vialesFiltrados));
     const vialesCsv = createCsvFromData(createVialesSheet(vialesFiltrados));
 
     // Descargar ambos archivos
-    downloadFile(biopsiasCsv, `Biopsias_${categoria === 'todas' ? 'Completo' : categoria}_${DateUtils.getCurrentDate()}.csv`);
-    downloadFile(vialesCsv, `Viales_${categoria === 'todas' ? 'Completo' : categoria}_${DateUtils.getCurrentDate()}.csv`);
+    downloadFile(biopsiasCsv, `Biopsias_${formatFilterSuffix(filters)}_${DateUtils.getCurrentDate()}.csv`);
+    downloadFile(vialesCsv, `Viales_${formatFilterSuffix(filters)}_${DateUtils.getCurrentDate()}.csv`);
   } catch (error) {
     console.error('Error exportando a CSV:', error);
     throw error;
   }
+}
+
+// Filtra biopsias según los filtros proporcionados
+export function filterBiopsias(biopsias: Biopsia[], filters: ExportFilters = {}): Biopsia[] {
+  return biopsias.filter((b) => {
+    const matchesAnio = !filters.anio || b.anio_extraccion === filters.anio;
+    const matchesLocalizacion = !filters.localizacion || b.localizacion === filters.localizacion;
+    return matchesAnio && matchesLocalizacion;
+  });
+}
+
+// Filtra viales según las biopsias filtradas
+function filterViales(viales: Vial[], biopsiasFiltradas: Biopsia[]): Vial[] {
+  const biopsiaIds = new Set(biopsiasFiltradas.map((b) => b.id));
+  return viales.filter((v) => biopsiaIds.has(v.biopsia_id));
+}
+
+// Genera sufijo para nombre de archivo basado en filtros
+function formatFilterSuffix(filters: ExportFilters = {}): string {
+  if (!filters.anio && !filters.localizacion) return 'Completo';
+  const parts: string[] = [];
+  if (filters.anio) parts.push(filters.anio.toString());
+  if (filters.localizacion) parts.push(filters.localizacion);
+  return parts.join('_');
 }
 
 // Crea un workbook Excel en formato XML/HTML

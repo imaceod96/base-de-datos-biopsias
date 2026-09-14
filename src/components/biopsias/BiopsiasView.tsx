@@ -1,13 +1,15 @@
 // Vista principal de biopsias
 // Muestra biopsias agrupadas por localizacion en desplegables con contadores
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAppContext } from '@/contexts/AppContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import {
   Trash2,
@@ -17,9 +19,11 @@ import {
   Filter as FilterIcon,
   Search as SearchIcon,
   ChevronDown,
+  Download,
 } from 'lucide-react';
 import { BiopsiaForm } from './BiopsiaForm';
 import { BiopsiaDetail } from './BiopsiaDetail';
+import { exportToCSV, exportToExcel, ExportFilters } from '@/utils/export';
 
 interface BiopsiasViewProps {
   onNewBiopsia: () => void;
@@ -49,6 +53,9 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
   const [editingBiopsiaId, setEditingBiopsiaId] = useState<string | null>(null);
   const [viewingBiopsiaId, setViewingBiopsiaId] = useState<string | null>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [showExportDialog, setShowExportDialog] = useState(false);
+  const [exportFilters, setExportFilters] = useState<ExportFilters>({});
+  const [exportFormat, setExportFormat] = useState<'excel' | 'csv'>('excel');
   
   // Contadores por localización
   const counts = useMemo(() => {
@@ -172,6 +179,10 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
             <FilterIcon className="mr-2 h-4 w-4" />
             Filtros
           </Button>
+          <Button variant="secondary" onClick={() => setShowExportDialog(true)}>
+            <Download className="mr-2 h-4 w-4" />
+            Exportar
+          </Button>
           <Button variant="secondary" onClick={onNewBiopsia}>
             <Plus className="mr-2 h-4 w-4" />
             Nueva biopsia
@@ -264,13 +275,86 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
         ))}
       </Accordion>
 
+      {/* Diálogo de exportación */}
+      <Dialog open={showExportDialog} onOpenChange={setShowExportDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Exportar base de datos</DialogTitle>
+            <DialogDescription>
+              Selecciona los filtros para exportar una parte de la base de datos
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label>Año</Label>
+              <Select
+                value={exportFilters.anio?.toString() ?? ''}
+                onValueChange={(value) => setExportFilters({ ...exportFilters, anio: value ? Number(value) : null })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Todos los años" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
+                    <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Localización</Label>
+              <Select
+                value={exportFilters.localizacion ?? ''}
+                onValueChange={(value) => setExportFilters({ ...exportFilters, localizacion: value || null })}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Todas las localizaciones" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LOCALIZACIONES.map(loc => (
+                    <SelectItem key={loc.value} value={loc.value}>{loc.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Formato</Label>
+              <Select value={exportFormat} onValueChange={(value) => setExportFormat(value as 'excel' | 'csv')}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Selecciona un formato" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="excel">Excel (.xlsx)</SelectItem>
+                  <SelectItem value="csv">CSV</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowExportDialog(false)}>Cancelar</Button>
+            <Button onClick={() => {
+              if (exportFormat === 'csv') {
+                exportToCSV(biopsias, viales, exportFilters);
+              } else {
+                exportToExcel(biopsias, viales, exportFilters);
+              }
+              setShowExportDialog(false);
+              toast({
+                title: 'Éxito',
+                description: 'Base de datos exportada correctamente',
+              });
+            }}>Exportar</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* Modales */}
       {editingBiopsiaId && (
-        <BiopsiaForm 
-          biopsiaId={editingBiopsiaId} 
+        <BiopsiaForm
+          biopsiaId={editingBiopsiaId}
           onSave={() => {
             setEditingBiopsiaId(null);
-          }} 
+          }}
           onCancel={() => {
             setEditingBiopsiaId(null);
           }}
@@ -278,9 +362,9 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
       )}
       
       {viewingBiopsiaId && (
-        <BiopsiaDetail 
-          biopsiaId={viewingBiopsiaId} 
-          onBack={() => setViewingBiopsiaId(null)} 
+        <BiopsiaDetail
+          biopsiaId={viewingBiopsiaId}
+          onBack={() => setViewingBiopsiaId(null)}
           onEdit={() => {
             setEditingBiopsiaId(viewingBiopsiaId);
             setViewingBiopsiaId(null);

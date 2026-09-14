@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Plus, Trash2, Edit } from 'lucide-react';
-import { CryptoUtils, DateUtils } from '@/utils/crypto';
+import { CryptoUtils, DateUtils, ValidationUtils } from '@/utils/crypto';
 
 interface BiopsiaFormProps {
   biopsiaId: string | null;
@@ -66,6 +66,17 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
       })));
     }
   }, [isEditing, biopsiaOriginal, viales, biopsiaId]);
+
+  // Auto-generar número de biopsia cuando cambia el año
+  useEffect(() => {
+    if (!isEditing && anioExtraccion.trim()) {
+      const year = parseInt(anioExtraccion);
+      if (!isNaN(year)) {
+        const nextNumber = ValidationUtils.generateNextBiopsiaNumber(year, biopsias);
+        setNumeroBiopsia(nextNumber);
+      }
+    }
+  }, [anioExtraccion, biopsias, isEditing]);
 
   // Mostrar/ocultar sub-localización
   useEffect(() => {
@@ -239,8 +250,8 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
               <Input
                 id="numeroBiopsia"
                 value={numeroBiopsia}
-                onChange={(e) => setNumeroBiopsia(e.target.value)}
-                placeholder="B-2026-001"
+                onChange={(e) => setNumeroBiopsia(ValidationUtils.formatNumeroBiopsiaInput(e.target.value))}
+                placeholder="B-26-00001"
                 className={errors.numeroBiopsia ? 'border-red-500' : ''}
               />
               {errors.numeroBiopsia && <p className="text-xs text-red-500">{errors.numeroBiopsia}</p>}

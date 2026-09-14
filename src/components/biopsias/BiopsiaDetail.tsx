@@ -12,6 +12,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableHead,
+  TableRow,
+  TableCell,
+} from '@/components/ui/table';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { ArrowLeft, Edit, Trash2, Plus, Clock, User } from 'lucide-react';
 import { CryptoUtils, DateUtils } from '@/utils/crypto';
@@ -201,23 +209,9 @@ export const BiopsiaDetail: React.FC<BiopsiaDetailProps> = ({ biopsiaId, onBack,
             <CardTitle>Ubicación física</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label>Tanque</Label>
-                <p className="text-sm text-gray-900">{biopsia.tanque}</p>
-              </div>
-              <div>
-                <Label>Rack</Label>
-                <p className="text-sm text-gray-900">{biopsia.rack}</p>
-              </div>
-              <div>
-                <Label>Caja</Label>
-                <p className="text-sm text-gray-900">{biopsia.caja}</p>
-              </div>
-              <div>
-                <Label>Posición</Label>
-                <p className="text-sm text-gray-900">{biopsia.posicion}</p>
-              </div>
+            <div>
+              <Label>Ubicación</Label>
+              <p className="text-sm text-gray-900">{biopsia.ubicacion}</p>
             </div>
           </CardContent>
         </Card>

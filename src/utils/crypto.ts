@@ -205,13 +205,58 @@ export class DateUtils {
 
 // Utilidades de validación
 export class ValidationUtils {
-  // Valida número de biopsia (formato B-YYYY-NNN)
+  // Valida número de biopsia (formato B-AA-NNNNN)
+  // AA = últimos 2 dígitos del año, NNNNN = numeración consecutiva
   static validateNumeroBiopsia(numero: string): { isValid: boolean; error?: string } {
-    const pattern = /^B-\d{4}-\d{3}$/;
+    const pattern = /^B-\d{2}-\d{5}$/;
     if (!pattern.test(numero)) {
-      return { isValid: false, error: 'El formato debe ser B-YYYY-NNN (ejemplo: B-2026-001)' };
+      return { isValid: false, error: 'El formato debe ser B-AA-NNNNN (ejemplo: B-26-00001)' };
     }
     return { isValid: true };
+  }
+
+  // Genera el siguiente número de biopsia para un año dado
+  // Formato: B-AA-NNNNN donde AA = últimos 2 dígitos del año
+  static generateNextBiopsiaNumber(year: number, biopsias: { numero_biopsia: string; anio_extraccion: number }[]): string {
+    const yearStr = year.toString().slice(-2);
+    const prefix = `B-${yearStr}-`;
+    
+    let maxNumber = 0;
+    biopsias.forEach(b => {
+      if (b.anio_extraccion === year && b.numero_biopsia.startsWith(prefix)) {
+        const numPart = b.numero_biopsia.substring(prefix.length);
+        const num = parseInt(numPart, 10);
+        if (!isNaN(num) && num > maxNumber) {
+          maxNumber = num;
+        }
+      }
+    });
+    
+    const nextNumber = (maxNumber + 1).toString().padStart(5, '0');
+    return `${prefix}${nextNumber}`;
+  }
+
+  // Auto-formatea el número de biopsia insertando guiones automáticamente
+  // Formato esperado: B-AA-NNNNN
+  static formatNumeroBiopsiaInput(input: string): string {
+    // Eliminar todos los caracteres no alfanuméricos
+    const cleaned = input.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+    
+    if (cleaned.length === 0) return '';
+    
+    let formatted = '';
+    // B (1 carácter)
+    formatted = cleaned.substring(0, 1);
+    // AA (2 caracteres)
+    if (cleaned.length > 1) {
+      formatted += '-' + cleaned.substring(1, 3);
+    }
+    // NNNNN (5 caracteres)
+    if (cleaned.length > 3) {
+      formatted += '-' + cleaned.substring(3, 8);
+    }
+    
+    return formatted;
   }
 
   // Valida año (4 dígitos, razonable)
