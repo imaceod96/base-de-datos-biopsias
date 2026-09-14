@@ -163,14 +163,17 @@ export const BiopsiasView: React.FC = () => {
               <label className="block text-sm font-medium mb-2">Localización</label>
               <Select 
                 value={selectedLocalizacion ?? ''}
-                onValueChange={(value) => setSelectedLocalizacion(value as Localizacion | null)}
-                className="w-full"
+                onValueChange={(value) => setSelectedLocalizacion(value as any | null)}
               >
-                <SelectValue placeholder="Seleccione una localización" />
-                <SelectItem value="Mama">Mama ({counts.mama})</SelectItem>
-                <SelectItem value="Pulmon">Pulmón ({counts.pulmon})</SelectItem>
-                <SelectItem value="Prostata">Próstata ({counts.prostata})</SelectItem>
-                <SelectItem value="Sistema_digestivo">Sistema digestivo ({counts.digestivo})</SelectItem>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Seleccione una localización" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Mama">Mama ({counts.mama})</SelectItem>
+                  <SelectItem value="Pulmon">Pulmón ({counts.pulmon})</SelectItem>
+                  <SelectItem value="Prostata">Próstata ({counts.prostata})</SelectItem>
+                  <SelectItem value="Sistema_digestivo">Sistema digestivo ({counts.digestivo})</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div>
@@ -178,28 +181,34 @@ export const BiopsiasView: React.FC = () => {
               <Select 
                 value={selectedAnio?.toString() ?? ''}
                 onValueChange={(value) => setSelectedAnio(value ? Number(value) : null)}
-                className="w-full"
               >
-                <SelectValue placeholder="Seleccione un año" />
-                {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
-                  <SelectItem key={year} value={year.toString()}>
-                    {year}
-                  </SelectItem>
-                ))}
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Seleccione un año" />
+                </SelectTrigger>
+                <SelectContent>
+                  {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
+                    <SelectItem key={year} value={year.toString()}>
+                      {year}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
               </Select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Sexo</label>
               <Select 
                 value={selectedSexo ?? ''}
-                onValueChange={(value) => setSelectedSexo(value as Sexo | null)}
-                className="w-full"
+                onValueChange={(value) => setSelectedSexo(value as any | null)}
               >
-                <SelectValue placeholder="Seleccione un sexo" />
-                <SelectItem value="Femenino">Femenino</SelectItem>
-                <SelectItem value="Masculino">Masculino</SelectItem>
-                <SelectItem value="Otro">Otro</SelectItem>
-                <SelectItem value="No_especificado">No especificado</SelectItem>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Seleccione un sexo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Femenino">Femenino</SelectItem>
+                  <SelectItem value="Masculino">Masculino</SelectItem>
+                  <SelectItem value="Otro">Otro</SelectItem>
+                  <SelectItem value="No_especificado">No especificado</SelectItem>
+                </SelectContent>
               </Select>
             </div>
             <div className="flex items-end">
@@ -226,7 +235,6 @@ export const BiopsiasView: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="flex-1 max-w-md"
-          leftIcon={<SearchIcon className="h-4 w-4 text-gray-400" />}
         />
       </div>
 
