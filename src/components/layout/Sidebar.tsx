@@ -17,14 +17,10 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
   React.useEffect(() => {
     const loadCounts = async () => {
       const total = await getBiopsiasCount();
-      const mama = await getBiopsiasCountByLocalizacion('Mama');
-      const pulmon = await getBiopsiasCountByLocalizacion('Pulmon');
-      const prostata = await getBiopsiasCountByLocalizacion('Prostata');
-      const digestivo = await getBiopsiasCountByLocalizacion('Sistema_digestivo');
-      setCounts({ total, mama, pulmon, prostata, digestivo });
+      setCounts({ total });
     };
     loadCounts();
-  }, [biopsias, getBiopsiasCount, getBiopsiasCountByLocalizacion]);
+  }, [biopsias, getBiopsiasCount]);
 
   const menuItems = [
     { id: 'biopsias', label: 'Biopsias', icon: '📋' },
@@ -41,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200">
-        <h1 className="text-xl font-bold text-gray-900">BioVault Lab</h1>
+        <h1 className="text-xl font-bold text-gray-900">Banco de Tumores INOR</h1>
         <p className="text-sm text-gray-500">Gestión de Biopsias</p>
       </div>
 

@@ -20,6 +20,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { 
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { 
   Trash2, 
   Edit, 
   Eye, 
@@ -56,6 +62,7 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
   
   // Contadores por localización
   const [counts, setCounts] = useState({
+    total: 0,
     mama: 0,
     pulmon: 0,
     prostata: 0,
@@ -64,14 +71,15 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
 
   useEffect(() => {
     const loadCounts = async () => {
+      const total = biopsias.length;
       const mama = await getBiopsiasCountByLocalizacion('Mama');
       const pulmon = await getBiopsiasCountByLocalizacion('Pulmon');
       const prostata = await getBiopsiasCountByLocalizacion('Prostata');
       const digestivo = await getBiopsiasCountByLocalizacion('Sistema_digestivo');
-      setCounts({ mama, pulmon, prostata, digestivo });
+      setCounts({ total, mama, pulmon, prostata, digestivo });
     };
     loadCounts();
-  }, [getBiopsiasCountByLocalizacion]);
+  }, [biopsias, getBiopsiasCountByLocalizacion]);
 
   // Filtrar biopsias
   const filteredBiopsias = React.useMemo(() => {
@@ -155,28 +163,37 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
         </div>
       </div>
 
+      {/* Filtros por localización */}
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>Filtar por localización</AccordionTrigger>
+          <AccordionContent>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 p-4">
+              <Button variant={!selectedLocalizacion ? "secondary" : "outline"} onClick={() => setSelectedLocalizacion(null)}>
+                Todas <Badge className="ml-2">{counts.total}</Badge>
+              </Button>
+              <Button variant={selectedLocalizacion === 'Mama' ? "secondary" : "outline"} onClick={() => setSelectedLocalizacion('Mama')}>
+                Mama <Badge className="ml-2">{counts.mama}</Badge>
+              </Button>
+              <Button variant={selectedLocalizacion === 'Pulmon' ? "secondary" : "outline"} onClick={() => setSelectedLocalizacion('Pulmon')}>
+                Pulmón <Badge className="ml-2">{counts.pulmon}</Badge>
+              </Button>
+              <Button variant={selectedLocalizacion === 'Prostata' ? "secondary" : "outline"} onClick={() => setSelectedLocalizacion('Prostata')}>
+                Próstata <Badge className="ml-2">{counts.prostata}</Badge>
+              </Button>
+              <Button variant={selectedLocalizacion === 'Sistema_digestivo' ? "secondary" : "outline"} onClick={() => setSelectedLocalizacion('Sistema_digestivo')}>
+                Sistema digestivo <Badge className="ml-2">{counts.digestivo}</Badge>
+              </Button>
+            </div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+
       {/* Filtros */}
       {showFilters && (
         <div className="bg-white rounded-lg border border-gray-200 p-4 mb-4">
-          <h2 className="text-lg font-semibold mb-4">Filtros</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-              <label className="block text-sm font-medium mb-2">Localización</label>
-              <Select 
-                value={selectedLocalizacion ?? ''}
-                onValueChange={(value) => setSelectedLocalizacion(value as any | null)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Seleccione una localización" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="Mama">Mama ({counts.mama})</SelectItem>
-                  <SelectItem value="Pulmon">Pulmón ({counts.pulmon})</SelectItem>
-                  <SelectItem value="Prostata">Próstata ({counts.prostata})</SelectItem>
-                  <SelectItem value="Sistema_digestivo">Sistema digestivo ({counts.digestivo})</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <h2 className="text-lg font-semibold mb-4">Filtros avanzados</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Año</label>
               <Select 
@@ -222,7 +239,7 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
                   setSelectedSexo(null);
                 }}
               >
-                Limpiar
+                Limpiar filtros
               </Button>
             </div>
           </div>

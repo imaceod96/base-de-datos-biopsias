@@ -64,7 +64,7 @@ export const TopBar: React.FC<TopBarProps> = ({ user, onNavigate }) => {
     <div className="flex items-center justify-between px-6 py-4 bg-white border-b border-gray-200 shadow-sm">
       {/* Título */}
       <div className="flex items-center gap-2">
-        <span className="text-xl font-bold text-gray-900">BioVault Lab</span>
+        <span className="text-xl font-bold text-gray-900">Banco de Tumores INOR</span>
       </div>
 
       {/* Buscador */}
