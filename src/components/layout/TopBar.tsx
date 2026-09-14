@@ -7,7 +7,7 @@ import { Role } from '@/types';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Select, SelectGroup, SelectTrigger, SelectContent, SelectLabel, SelectItem } from '@/components/ui/select';
+import { Select, SelectGroup, SelectTrigger, SelectContent, SelectLabel, SelectItem, SelectValue } from '@/components/ui/select';
 import { useMemo } from 'react';
 
 interface TopBarProps {
@@ -82,39 +82,48 @@ export const TopBar: React.FC<TopBarProps> = ({ user, onNavigate }) => {
 
       {/* Filtros */}
       <div className="flex items-center gap-4">
-        <Select
-          onValueChange={(value) => setSelectedLocalizacion(value as Localizacion | null)}
-          className="w-32"
-        >
-          <SelectGroup label="Localización">
-            <SelectItem value="Mama">Mama</SelectItem>
-            <SelectItem value="Pulmon">Pulmón</SelectItem>
-            <SelectItem value="Prostata">Próstata</SelectItem>
-            <SelectItem value="Sistema_digestivo">Sistema digestivo</SelectItem>
-          </SelectGroup>
+        <Select onValueChange={(value) => setSelectedLocalizacion(value as any | null)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Localización" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Localización</SelectLabel>
+              <SelectItem value="Mama">Mama</SelectItem>
+              <SelectItem value="Pulmon">Pulmón</SelectItem>
+              <SelectItem value="Prostata">Próstata</SelectItem>
+              <SelectItem value="Sistema_digestivo">Sistema digestivo</SelectItem>
+            </SelectGroup>
+          </SelectContent>
         </Select>
 
-        <Select
-          onValueChange={(value) => setSelectedAnio(value ? Number(value) : null)}
-          className="w-32"
-        >
-          <SelectGroup label="Año">
-            <SelectItem value={new Date().getFullYear()}>{new Date().getFullYear()}</SelectItem>
-            <SelectItem value={new Date().getFullYear() - 1}>{new Date().getFullYear() - 1}</SelectItem>
-            <SelectItem value={new Date().getFullYear() - 2}>{new Date().getFullYear() - 2}</SelectItem>
-          </SelectGroup>
+        <Select onValueChange={(value) => setSelectedAnio(value ? Number(value) : null)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Año" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Año</SelectLabel>
+              <SelectItem value={new Date().getFullYear().toString()}>{new Date().getFullYear()}</SelectItem>
+              <SelectItem value={(new Date().getFullYear() - 1).toString()}>{new Date().getFullYear() - 1}</SelectItem>
+              <SelectItem value={(new Date().getFullYear() - 2).toString()}>{new Date().getFullYear() - 2}</SelectItem>
+            </SelectGroup>
+          </SelectContent>
         </Select>
 
-        <Select
-          onValueChange={(value) => setSelectedSexo(value as Sexo | null)}
-          className="w-32"
-        >
-          <SelectGroup label="Sexo">
-            <SelectItem value="Femenino">Femenino</SelectItem>
-            <SelectItem value="Masculino">Masculino</SelectItem>
-            <SelectItem value="Otro">Otro</SelectItem>
-            <SelectItem value="No_especificado">No especificado</SelectItem>
-          </SelectGroup>
+        <Select onValueChange={(value) => setSelectedSexo(value as any | null)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Sexo" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Sexo</SelectLabel>
+              <SelectItem value="Femenino">Femenino</SelectItem>
+              <SelectItem value="Masculino">Masculino</SelectItem>
+              <SelectItem value="Otro">Otro</SelectItem>
+              <SelectItem value="No_especificado">No especificado</SelectItem>
+            </SelectGroup>
+          </SelectContent>
         </Select>
       </div>
 
