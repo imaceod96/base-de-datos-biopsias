@@ -146,6 +146,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const createFirstAdmin = useCallback(async (username: string, password: string) => {
     const result = await AuthManager.createFirstAdmin(username, password);
     if (result.success) {
+      setIsFirstStartup(false);
       await refreshData();
     }
     return result;
