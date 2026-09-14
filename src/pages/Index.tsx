@@ -1,4 +1,4 @@
-// Página principal de BioVault Lab
+// Página principal de Banco de Tumores INOR
 // Maneja el enrutamiento basado en el estado de autenticación
 
 import { useState, useEffect, useCallback } from 'react';

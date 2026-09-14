@@ -1,4 +1,4 @@
-// Contexto global de la aplicación BioVault Lab
+// Contexto global de la aplicación Banco de Tumores INOR
 // Gestiona autenticación, estado de datos y operaciones CRUD
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';

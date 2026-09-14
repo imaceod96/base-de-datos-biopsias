@@ -1,4 +1,4 @@
-// Utilidades criptográficas seguras para BioVault Lab
+// Utilidades criptográficas seguras para Banco de Tumores INOR
 // Utiliza Web Crypto API con PBKDF2 y SHA-256 para el hash de contraseñas
 
 export class CryptoUtils {
@@ -96,8 +96,8 @@ export class CryptoUtils {
 
 // Utilidades para el almacenamiento local
 export class StorageUtils {
-  private static readonly STORAGE_KEY = 'biovault_app_state';
-  private static readonly SESSION_KEY = 'biovault_session';
+  private static readonly STORAGE_KEY = 'banco_tumores_inor_app_state';
+  private static readonly SESSION_KEY = 'banco_tumores_inor_session';
 
   // Guarda el estado de la aplicación
   static saveAppState(state: any): void {

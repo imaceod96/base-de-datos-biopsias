@@ -1,4 +1,4 @@
-// Layout principal de BioVault Lab
+// Layout principal de Banco de Tumores INOR
 // Barra lateral, barra superior y zona central
 
 import React from 'react';
@@ -80,7 +80,7 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
         {/* Logo */}
         <div className="p-6 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-gray-900">BioVault Lab</h1>
+          <h1 className="text-xl font-bold text-gray-900">Banco de Tumores INOR</h1>
           <p className="text-sm text-gray-500">Gestión de Biopsias</p>
         </div>
 

@@ -1,4 +1,4 @@
-// Módulo de autenticación para BioVault Lab
+// Módulo de autenticación para Banco de Tumores INOR
 // Gestiona login, logout, sesiones y permisos
 
 import { Usuario, Role, Session } from '@/types';

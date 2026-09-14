@@ -1,4 +1,4 @@
-// Exportador multi-hoja Excel y CSV para BioVault Lab
+// Exportador multi-hoja Excel y CSV para Banco de Tumores INOR
 // Genera archivos .xlsx y .csv sin dependencias externas
 
 import { Biopsia, Vial } from '@/types';

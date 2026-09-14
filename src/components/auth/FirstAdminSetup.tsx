@@ -1,4 +1,4 @@
-// Pantalla de configuración inicial de BioVault Lab
+// Pantalla de configuración inicial de Banco de Tumores INOR
 // Crea el primer administrador del sistema
 
 import React, { useState } from 'react';

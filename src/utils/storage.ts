@@ -1,10 +1,10 @@
-// Motor de almacenamiento local persistente para BioVault Lab
+// Motor de almacenamiento local persistente para Banco de Tumores INOR
 // Utiliza IndexedDB para almacenamiento robusto y eficiente
 
 import { AppState, Usuario, Biopsia, Vial, Nota, AccionHistorial, CopiaSeguridad } from '@/types';
 import { CryptoUtils, StorageUtils } from './crypto';
 
-const DB_NAME = 'BioVaultLabDB';
+const DB_NAME = 'BancoDeTumoresINORDB';
 const DB_VERSION = 1;
 
 // Nombres de stores

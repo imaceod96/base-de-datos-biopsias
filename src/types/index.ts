@@ -1,4 +1,4 @@
-// Core types for BioVault Lab
+// Core types for Banco de Tumores INOR
 
 export type Role = 'admin' | 'gestor' | 'visualizador';
 

@@ -1,4 +1,4 @@
-// Pantalla de inicio de sesión de BioVault Lab
+// Pantalla de inicio de sesión de Banco de Tumores INOR
 
 import React, { useState } from 'react';
 import { useAppContext } from '@/contexts/AppContext';

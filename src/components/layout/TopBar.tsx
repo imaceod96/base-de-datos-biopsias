@@ -1,4 +1,4 @@
-// Barra superior de BioVault Lab
+// Barra superior de Banco de Tumores INOR
 // Contiene buscador, filtros, botones de acción y info del usuario
 
 import React from 'react';

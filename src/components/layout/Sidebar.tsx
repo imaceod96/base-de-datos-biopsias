@@ -1,4 +1,4 @@
-// Barra lateral de navegación de BioVault Lab
+// Barra lateral de navegación de Banco de Tumores INOR
 
 import React from 'react';
 import { useAppContext } from '@/contexts/AppContext';
