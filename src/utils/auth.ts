@@ -134,7 +134,7 @@ export class AuthManager {
 
       return { success: true };
     } catch (error) {
-      console.error('Error detallado al crear primer admin:', error);
+      console.error('Error creando primer admin:', error);
       return { success: false, error: 'Error al crear administrador' };
     }
   }
