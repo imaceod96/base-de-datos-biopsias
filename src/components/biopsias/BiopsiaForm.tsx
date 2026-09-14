@@ -41,10 +41,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
   const [diagnostico, setDiagnostico] = useState('');
   const [anioExtraccion, setAnioExtraccion] = useState('');
   const [sexo, setSexo] = useState<Sexo>('Femenino');
-  const [tanque, setTanque] = useState('');
-  const [rack, setRack] = useState('');
-  const [caja, setCaja] = useState('');
-  const [posicion, setPosicion] = useState('');
+  const [ubicacion, setUbicacion] = useState('');
   const [vialesList, setVialesList] = useState<Array<{ id?: string; identificador: string; tipo: VialType }>>([]);
   const [showLocalizacionEspecifica, setShowLocalizacionEspecifica] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -58,10 +55,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
       setDiagnostico(biopsiaOriginal.diagnostico);
       setAnioExtraccion(biopsiaOriginal.anio_extraccion.toString());
       setSexo(biopsiaOriginal.sexo);
-      setTanque(biopsiaOriginal.tanque);
-      setRack(biopsiaOriginal.rack);
-      setCaja(biopsiaOriginal.caja);
-      setPosicion(biopsiaOriginal.posicion);
+      setUbicacion(biopsiaOriginal.ubicacion || '');
       
       // Cargar viales
       const vialesBiopsia = viales.filter(v => v.biopsia_id === biopsiaId);
@@ -111,17 +105,8 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
       }
     }
     
-    if (!tanque.trim()) {
-      newErrors.tanque = 'El tanque es obligatorio';
-    }
-    if (!rack.trim()) {
-      newErrors.rack = 'El rack es obligatorio';
-    }
-    if (!caja.trim()) {
-      newErrors.caja = 'La caja es obligatoria';
-    }
-    if (!posicion.trim()) {
-      newErrors.posicion = 'La posición es obligatoria';
+    if (!ubicacion.trim()) {
+      newErrors.ubicacion = 'La ubicación es obligatoria';
     }
     
     setErrors(newErrors);
@@ -151,10 +136,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
           diagnostico,
           anio_extraccion: parseInt(anioExtraccion),
           sexo,
-          tanque,
-          rack,
-          caja,
-          posicion,
+          ubicacion,
           updated_by: userId,
           fecha_modificacion: now,
         };
@@ -185,10 +167,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
           diagnostico,
           anio_extraccion: parseInt(anioExtraccion),
           sexo,
-          tanque,
-          rack,
-          caja,
-          posicion,
+          ubicacion,
           created_by: userId,
           fecha_creacion: now,
           updated_by: null,
@@ -337,52 +316,18 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
 
           {/* Ubicación física */}
           <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Ubicación en el tanque</h3>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="tanque">Tanque *</Label>
-                <Input
-                  id="tanque"
-                  value={tanque}
-                  onChange={(e) => setTanque(e.target.value)}
-                  placeholder="T1"
-                  className={errors.tanque ? 'border-red-500' : ''}
-                />
-                {errors.tanque && <p className="text-xs text-red-500">{errors.tanque}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="rack">Rack / Gradilla *</Label>
-                <Input
-                  id="rack"
-                  value={rack}
-                  onChange={(e) => setRack(e.target.value)}
-                  placeholder="R3"
-                  className={errors.rack ? 'border-red-500' : ''}
-                />
-                {errors.rack && <p className="text-xs text-red-500">{errors.rack}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="caja">Caja *</Label>
-                <Input
-                  id="caja"
-                  value={caja}
-                  onChange={(e) => setCaja(e.target.value)}
-                  placeholder="C12"
-                  className={errors.caja ? 'border-red-500' : ''}
-                />
-                {errors.caja && <p className="text-xs text-red-500">{errors.caja}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="posicion">Posición *</Label>
-                <Input
-                  id="posicion"
-                  value={posicion}
-                  onChange={(e) => setPosicion(e.target.value)}
-                  placeholder="A5"
-                  className={errors.posicion ? 'border-red-500' : ''}
-                />
-                {errors.posicion && <p className="text-xs text-red-500">{errors.posicion}</p>}
-              </div>
+            <h3 className="text-lg font-semibold">Ubicación</h3>
+            <div className="space-y-2">
+              <Label htmlFor="ubicacion">Descripción de la ubicación *</Label>
+              <Textarea
+                id="ubicacion"
+                value={ubicacion}
+                onChange={(e) => setUbicacion(e.target.value)}
+                placeholder="Describa la ubicación física de la muestra..."
+                rows={3}
+                className={errors.ubicacion ? 'border-red-500' : ''}
+              />
+              {errors.ubicacion && <p className="text-xs text-red-500">{errors.ubicacion}</p>}
             </div>
           </div>
 

@@ -28,10 +28,7 @@ export interface Biopsia {
   diagnostico: string;
   anio_extraccion: number;
   sexo: Sexo;
-  tanque: string;
-  rack: string;
-  caja: string;
-  posicion: string;
+  ubicacion: string;
   created_by: string;
   fecha_creacion: string;
   updated_by: string | null;
