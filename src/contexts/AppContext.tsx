@@ -2,7 +2,7 @@
 // Gestiona autenticación, estado de datos y operaciones CRUD
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
-import { Usuario, Biopsia, Vial, Nota, AccionHistorial, Role, Session } from '@/types';
+import { Usuario, Biopsia, Vial, Nota, AccionHistorial, Role, Session, CopiaSeguridad, AppState } from '@/types';
 import { CryptoUtils, StorageUtils, DateUtils } from '@/utils/crypto';
 import { storageEngine } from '@/utils/storage';
 import { AuthManager } from '@/utils/auth';
@@ -22,7 +22,8 @@ interface AppContextType {
   viales: Vial[];
   notas: Nota[];
   historial: AccionHistorial[];
-  
+  copias_seguridad: CopiaSeguridad[];
+
   // Operaciones de biopsia
   createBiopsia: (biopsia: Biopsia) => Promise<void>;
   updateBiopsia: (biopsia: Biopsia) => Promise<void>;
@@ -44,7 +45,12 @@ interface AppContextType {
   
   // Operaciones de historial
   addHistorialEntry: (entry: Omit<AccionHistorial, 'id'>) => Promise<void>;
-  
+
+  // Operaciones de backup
+  createCopiaSeguridad: (copia: CopiaSeguridad) => Promise<void>;
+  getCopiasSeguridad: () => Promise<CopiaSeguridad[]>;
+  restoreFullState: (state: AppState) => Promise<void>;
+
   // Utilidades
   getBiopsiasCount: () => Promise<number>;
   getBiopsiasCountByLocalizacion: (localizacion: string) => Promise<number>;
@@ -72,22 +78,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [viales, setViales] = useState<Vial[]>([]);
   const [notas, setNotas] = useState<Nota[]>([]);
   const [historial, setHistorial] = useState<AccionHistorial[]>([]);
+  const [copias_seguridad, setCopiasSeguridad] = useState<CopiaSeguridad[]>([]);
 
   // Cargar datos al iniciar
   const refreshData = useCallback(async () => {
     try {
-      const [users, biops, vials, notes, hist] = await Promise.all([
+      const [users, biops, vials, notes, hist, backups] = await Promise.all([
         storageEngine.getUsuarios(),
         storageEngine.getBiopsias(),
         storageEngine.getViales(),
         storageEngine.getNotas(),
         storageEngine.getHistorial(),
+        storageEngine.getCopiasSeguridad(),
       ]);
       setUsuarios(users);
       setBiopsias(biops);
       setViales(vials);
       setNotas(notes);
       setHistorial(hist);
+      setCopiasSeguridad(backups);
     } catch (error) {
       console.error('Error cargando datos:', error);
     }
@@ -204,7 +213,23 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Operaciones de historial
   const addHistorialEntry = useCallback(async (entry: Omit<AccionHistorial, 'id'>) => {
-    await storageEngine.createHistorial(entry);
+    const newEntry = { ...entry, id: CryptoUtils.generateId() };
+    await storageEngine.createHistorial(newEntry);
+    await refreshData();
+  }, [refreshData]);
+
+  // Operaciones de backup
+  const createCopiaSeguridad = useCallback(async (copia: CopiaSeguridad) => {
+    await storageEngine.createCopiaSeguridad(copia);
+    await refreshData();
+  }, [refreshData]);
+
+  const getCopiasSeguridad = useCallback(async () => {
+    return storageEngine.getCopiasSeguridad();
+  }, []);
+
+  const restoreFullState = useCallback(async (state: AppState) => {
+    await storageEngine.restoreFullState(state);
     await refreshData();
   }, [refreshData]);
 
@@ -244,6 +269,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     viales,
     notas,
     historial,
+    copias_seguridad,
     
     // Operaciones de biopsia
     createBiopsia,
@@ -266,6 +292,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     
     // Operaciones de historial
     addHistorialEntry,
+
+    // Operaciones de backup
+    createCopiaSeguridad,
+    getCopiasSeguridad,
+    restoreFullState,
     
     // Utilidades
     getBiopsiasCount,
@@ -275,13 +306,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     getVialesNoTumoralesCount,
     refreshData,
   }), [
-    session, isFirstStartup, usuarios, biopsias, viales, notas, historial,
+    session, isFirstStartup, usuarios, biopsias, viales, notas, historial, copias_seguridad,
     login, logout, createFirstAdmin,
     createBiopsia, updateBiopsia, deleteBiopsia,
     createVial, updateVial, deleteVial,
     createNota, deleteNota,
     createUsuario, updateUsuario, deleteUsuario,
     addHistorialEntry,
+    createCopiaSeguridad, getCopiasSeguridad, restoreFullState,
     getBiopsiasCount, getBiopsiasCountByLocalizacion,
     getVialesCount, getVialesTumoralesCount, getVialesNoTumoralesCount,
     refreshData,
