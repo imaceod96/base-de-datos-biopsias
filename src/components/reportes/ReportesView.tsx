@@ -184,14 +184,17 @@ export const ReportesView: React.FC = () => {
             <Select 
               value={filters.anio?.toString() ?? ''}
               onValueChange={(value) => setFilters(prev => ({ ...prev, anio: value ? Number(value) : null }))}
-              className="w-full"
             >
-              <SelectValue placeholder="Seleccione un año" />
-              {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
-                <SelectItem key={year} value={year.toString()}>
-                  {year}
-                </SelectItem>
-              ))}
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Seleccione un año" />
+              </SelectTrigger>
+              <SelectContent>
+                {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
           </div>
           <div>
@@ -199,13 +202,16 @@ export const ReportesView: React.FC = () => {
             <Select 
               value={filters.localizacion ?? ''}
               onValueChange={(value) => setFilters(prev => ({ ...prev, localizacion: value as string | null }))}
-              className="w-full"
             >
-              <SelectValue placeholder="Seleccione una localización" />
-              <SelectItem value="Mama">Mama</SelectItem>
-              <SelectItem value="Pulmon">Pulmón</SelectItem>
-              <SelectItem value="Prostata">Próstata</SelectItem>
-              <SelectItem value="Sistema_digestivo">Sistema digestivo</SelectItem>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Seleccione una localización" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Mama">Mama</SelectItem>
+                <SelectItem value="Pulmon">Pulmón</SelectItem>
+                <SelectItem value="Prostata">Próstata</SelectItem>
+                <SelectItem value="Sistema_digestivo">Sistema digestivo</SelectItem>
+              </SelectContent>
             </Select>
           </div>
           <div>
@@ -213,13 +219,16 @@ export const ReportesView: React.FC = () => {
             <Select 
               value={filters.sexo ?? ''}
               onValueChange={(value) => setFilters(prev => ({ ...prev, sexo: value as string | null }))}
-              className="w-full"
             >
-              <SelectValue placeholder="Seleccione un sexo" />
-              <SelectItem value="Femenino">Femenino</SelectItem>
-              <SelectItem value="Masculino">Masculino</SelectItem>
-              <SelectItem value="Otro">Otro</SelectItem>
-              <SelectItem value="No_especificado">No especificado</SelectItem>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Seleccione un sexo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Femenino">Femenino</SelectItem>
+                <SelectItem value="Masculino">Masculino</SelectItem>
+                <SelectItem value="Otro">Otro</SelectItem>
+                <SelectItem value="No_especificado">No especificado</SelectItem>
+              </SelectContent>
             </Select>
           </div>
         </div>

@@ -87,10 +87,10 @@ export const UsuariosView: React.FC = () => {
 
   // Manejar creación/edición
   const handleSubmit = async () => {
-    if (!newUsername.trim() || !newPassword) {
+    if (!newUsername.trim() || (!editingUser && !newPassword)) {
       toast({
         title: 'Error',
-        description: 'El nombre de usuario y la contraseña son obligatorios',
+        description: 'El nombre de usuario y la contraseña son obligatorios para nuevos usuarios',
         variant: 'destructive',
       });
       return;
@@ -261,7 +261,7 @@ export const UsuariosView: React.FC = () => {
 
   // Manejar cambio de estado
   const handleToggleState = async (user: Usuario) => {
-    if (isLastAdmin(user.id) && !user.active) {
+    if (isLastAdmin(user.id) && user.active) {
       toast({
         title: 'Error',
         description: 'No se puede desactivar el último administrador activo',
@@ -281,17 +281,17 @@ export const UsuariosView: React.FC = () => {
       await addHistorialEntry({
         usuario_id: session?.userId || '',
         username: session?.username || '',
-        accion: user.active ? 'desactivar_usuario' : 'activar_usuario',
+        accion: !user.active ? 'activar_usuario' : 'desactivar_usuario',
         entidad: 'usuario',
         entidad_id: user.id,
-        descripcion: `${user.active ? 'Desactivó' : 'Activó'} usuario ${user.username}`,
+        descripcion: `${!user.active ? 'Activó' : 'Desactivó'} usuario ${user.username}`,
         fecha: new Date().toISOString().split('T')[0],
         hora: new Date().toTimeString().split(' ')[0].substring(0, 5),
       });
       
       toast({
         title: 'Éxito',
-        description: `Usuario ${user.active ? 'desactivado' : 'activado'} correctamente`,
+        description: `Usuario ${!user.active ? 'activado' : 'desactivado'} correctamente`,
       });
     } catch (error) {
       toast({
@@ -360,7 +360,7 @@ export const UsuariosView: React.FC = () => {
                         <Switch
                           checked={user.active}
                           onCheckedChange={() => handleToggleState(user)}
-                          disabled={isLastAdmin(user.id) && !user.active}
+                          disabled={isLastAdmin(user.id) && user.active}
                         />
                       </TableCell>
                       <TableCell>{DateUtils.formatDate(user.created_at)}</TableCell>
