@@ -2,7 +2,7 @@
 // Gestiona login, logout, sesiones y permisos
 
 import { Usuario, Role, Session } from '@/types';
-import { CryptoUtils, StorageUtils } from './crypto';
+import { CryptoUtils, StorageUtils, ValidationUtils } from './crypto';
 import { storageEngine } from './storage';
 
 export class AuthManager {
@@ -89,13 +89,13 @@ export class AuthManager {
       }
 
       // Validar contraseña
-      const passwordValidation = CryptoUtils.validatePassword(password);
+      const passwordValidation = ValidationUtils.validatePassword(password);
       if (!passwordValidation.isValid) {
         return { success: false, error: passwordValidation.error };
       }
 
       // Validar username
-      const usernameValidation = CryptoUtils.validateUsername(username);
+      const usernameValidation = ValidationUtils.validateUsername(username);
       if (!usernameValidation.isValid) {
         return { success: false, error: usernameValidation.error };
       }
