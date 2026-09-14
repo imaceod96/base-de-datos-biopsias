@@ -33,7 +33,7 @@ export class CryptoUtils {
       },
       passwordKey,
       { name: 'AES-GCM', length: this.KEY_SIZE * 8 },
-      false,
+      true, // <-- Allow the key to be extractable
       ['encrypt', 'decrypt']
     );
 
