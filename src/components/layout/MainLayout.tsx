@@ -16,8 +16,7 @@ import {
   LogOut,
   Search,
   Filter,
-  Download,
-  Plus
+  Download
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -68,7 +67,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
   const puedeVerUsuarios = session?.role === 'admin';
   const puedeVerHistorial = session?.role === 'admin';
   const puedeVerBackup = session?.role === 'admin';
-  const puedeCrearBiopsia = session?.role === 'admin' || session?.role === 'gestor';
   const puedeExportar = session?.role === 'admin' || session?.role === 'gestor';
 
   return (
@@ -162,18 +160,12 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
 
             {/* Right side */}
             <div className="flex items-center gap-3">
-              {puedeCrearBiopsia && (
-                <Button variant="ghost" size="sm" onClick={() => onNavigate('biopsia-form')}>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Nueva biopsia
+              {puedeExportar && (
+                <Button variant="ghost" size="sm" onClick={() => onNavigate('reportes')}>
+                  <Download className="h-4 w-4 mr-2" />
+                  Exportar
                 </Button>
               )}
-              {puedeExportar && (
-                              <Button variant="ghost" size="sm" onClick={() => onNavigate('reportes')}>
-                                <Download className="h-4 w-4 mr-2" />
-                                Exportar
-                              </Button>
-                            )}
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

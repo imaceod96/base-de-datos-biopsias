@@ -79,19 +79,9 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
   }, [anioExtraccion, biopsias, isEditing]);
 
   // Mostrar/ocultar sub-localización
-    useEffect(() => {
-      setShowLocalizacionEspecifica(localizacion === 'Sistema_digestivo');
-    }, [localizacion]);
-  
-    // Cuando se guarda la biopsia, cerrar el diálogo después de un retraso
-    useEffect(() => {
-      if (!isEditing && onSave) {
-        const timeoutId = setTimeout(() => {
-          onSave();
-        }, 100);
-        return () => clearTimeout(timeoutId);
-      }
-    }, [isEditing, onSave]);
+  useEffect(() => {
+    setShowLocalizacionEspecifica(localizacion === 'Sistema_digestivo');
+  }, [localizacion]);
 
   // Validaciones
   const validate = (): boolean => {
@@ -241,7 +231,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
   };
 
   return (
-    <Dialog open={true} onOpenChange={() => onCancel()}>
+    <Dialog open={true}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>

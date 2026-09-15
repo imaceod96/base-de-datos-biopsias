@@ -44,8 +44,12 @@ const formatLocalizacion = (value: string): string => {
 };
 
 export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
-  const { biopsias, viales, deleteBiopsia, addHistorialEntry } = useAppContext();
+  const { biopsias, viales, deleteBiopsia, addHistorialEntry, session } = useAppContext();
   const { toast } = useToast();
+
+  const puedeCrear = session?.role === 'admin' || session?.role === 'gestor';
+  const puedeExportar = session?.role === 'admin' || session?.role === 'gestor';
+  const puedeEditar = session?.role === 'admin' || session?.role === 'gestor';
   
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAnio, setSelectedAnio] = useState<number | null>(null);
@@ -160,12 +164,16 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
         <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setViewingBiopsiaId(biopsia.id); }}>
           <Eye className="h-4 w-4" />
         </Button>
-        <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setEditingBiopsiaId(biopsia.id); }}>
-          <Edit className="h-4 w-4" />
-        </Button>
-        <Button variant="destructive" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(biopsia.id, biopsia.numero_biopsia); }}>
-          <Trash2 className="h-4 w-4" />
-        </Button>
+        {puedeEditar && (
+          <>
+            <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); setEditingBiopsiaId(biopsia.id); }}>
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button variant="destructive" size="sm" onClick={(e) => { e.stopPropagation(); handleDelete(biopsia.id, biopsia.numero_biopsia); }}>
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -185,14 +193,18 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
             <FilterIcon className="mr-2 h-4 w-4" />
             Filtros
           </Button>
-          <Button variant="secondary" onClick={() => setShowExportDialog(true)}>
-            <Download className="mr-2 h-4 w-4" />
-            Exportar
-          </Button>
-          <Button variant="secondary" onClick={onNewBiopsia}>
-            <Plus className="mr-2 h-4 w-4" />
-            Nueva biopsia
-          </Button>
+          {puedeExportar && (
+            <Button variant="secondary" onClick={() => setShowExportDialog(true)}>
+              <Download className="mr-2 h-4 w-4" />
+              Exportar
+            </Button>
+          )}
+          {puedeCrear && (
+            <Button variant="secondary" onClick={onNewBiopsia}>
+              <Plus className="mr-2 h-4 w-4" />
+              Nueva biopsia
+            </Button>
+          )}
         </div>
       </div>
 
