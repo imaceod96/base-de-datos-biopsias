@@ -163,17 +163,17 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
             {/* Right side */}
             <div className="flex items-center gap-3">
               {puedeCrearBiopsia && (
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" onClick={() => onNavigate('biopsia-form')}>
                   <Plus className="h-4 w-4 mr-2" />
                   Nueva biopsia
                 </Button>
               )}
               {puedeExportar && (
-                <Button variant="ghost" size="sm">
-                  <Download className="h-4 w-4 mr-2" />
-                  Exportar
-                </Button>
-              )}
+                              <Button variant="ghost" size="sm" onClick={() => onNavigate('reportes')}>
+                                <Download className="h-4 w-4 mr-2" />
+                                Exportar
+                              </Button>
+                            )}
               
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

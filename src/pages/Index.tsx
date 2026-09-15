@@ -23,6 +23,15 @@ const Index = () => {
   const [selectedBiopsiaId, setSelectedBiopsiaId] = useState<string | null>(null);
   const [editingBiopsiaId, setEditingBiopsiaId] = useState<string | null>(null);
 
+  // Restablecer vista a biopsias cuando se desloguea
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setCurrentView('biopsias');
+      setEditingBiopsiaId(null);
+      setSelectedBiopsiaId(null);
+    }
+  }, [isAuthenticated]);
+
   // Si no está autenticado, mostrar login
   if (!isAuthenticated) {
     // Si es primera ejecución, mostrar configuración inicial
