@@ -5,13 +5,13 @@ import React from 'react';
 import { useAppContext } from '@/contexts/AppContext';
 import { Role } from '@/types';
 import { cn } from '@/lib/utils';
-import { 
-  Home, 
-  FileText, 
-  BarChart3, 
-  Users, 
-  History, 
-  Shield, 
+import {
+  Home,
+  FileText,
+  BarChart3,
+  Users,
+  History,
+  Shield,
   User,
   LogOut,
   Search,
@@ -24,7 +24,6 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import logo from '@/assets/logo-banco-tumores.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -76,12 +75,11 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
     <div className="min-h-screen bg-gray-50 flex">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
-        {/* Logo */}
-        <div className="p-6 border-b border-gray-200 flex flex-col items-center">
-          <img src={logo} alt="Banco de Tumores INOR" className="w-16 h-16 object-contain mb-2" />
-          <h1 className="text-xl font-bold text-gray-900">Banco de Tumores INOR</h1>
-          <p className="text-sm text-gray-500">Gestión de Biopsias</p>
-        </div>
+        {/* Header */}
+                <div className="p-6 border-b border-gray-200 flex flex-col items-center">
+                  <h1 className="text-xl font-bold text-gray-900">Banco de Tumores INOR</h1>
+                  <p className="text-sm text-gray-500">Gestión de Biopsias</p>
+                </div>
 
         {/* Menú */}
         <nav className="flex-1 p-4 space-y-2">

@@ -4,7 +4,6 @@ import React from 'react';
 import { useAppContext } from '@/contexts/AppContext';
 import { Role } from '@/types';
 import { cn } from '@/lib/utils';
-import logo from '@/assets/logo-banco-tumores.png';
 
 interface SidebarProps {
   currentView: string;
@@ -38,10 +37,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentView, onNavigate }) => 
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
       {/* Logo */}
       <div className="p-6 border-b border-gray-200 flex flex-col items-center">
-        <img src={logo} alt="Banco de Tumores INOR" className="w-16 h-16 object-contain mb-2" />
-        <h1 className="text-xl font-bold text-gray-900">Banco de Tumores INOR</h1>
-        <p className="text-sm text-gray-500">Gestión de Biopsias</p>
-      </div>
+              <h1 className="text-xl font-bold text-gray-900">Banco de Tumores INOR</h1>
+              <p className="text-sm text-gray-500">Gestión de Biopsias</p>
+            </div>
 
       {/* Menu */}
       <nav className="flex-1 p-4 space-y-2">
