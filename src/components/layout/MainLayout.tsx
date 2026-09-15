@@ -24,6 +24,7 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import logo from '@/assets/logo-banco-tumores.png';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -54,9 +55,6 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
   
   // Calcular contadores
   const totalBiopsias = biopsias.length;
-  const totalViales = viales.length;
-  const tumorales = viales.filter(v => v.tipo === 'tumoral').length;
-  const noTumorales = viales.filter(v => v.tipo === 'no_tumoral').length;
   
   // Contar por localización
   const counts = {
@@ -79,23 +77,10 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-full z-10">
         {/* Logo */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-gray-200 flex flex-col items-center">
+          <img src={logo} alt="Banco de Tumores INOR" className="w-16 h-16 object-contain mb-2" />
           <h1 className="text-xl font-bold text-gray-900">Banco de Tumores INOR</h1>
           <p className="text-sm text-gray-500">Gestión de Biopsias</p>
-        </div>
-
-        {/* Dashboard rápido */}
-        <div className="p-4 border-b border-gray-200">
-          <div className="grid grid-cols-2 gap-2 text-center">
-            <div>
-              <p className="text-2xl font-bold text-blue-600">{totalBiopsias}</p>
-              <p className="text-xs text-gray-500">Biopsias</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-green-600">{totalViales}</p>
-              <p className="text-xs text-gray-500">Viales</p>
-            </div>
-          </div>
         </div>
 
         {/* Menú */}

@@ -24,6 +24,12 @@ export const TopBar: React.FC<TopBarProps> = ({ user, onNavigate }) => {
   const [selectedAnio, setSelectedAnio] = React.useState<number | null>(null);
   const [selectedSexo, setSelectedSexo] = React.useState<string | null>(null);
 
+  // Años dinámicos basados en los datos cargados
+  const aniosDisponibles = React.useMemo(() => {
+    const years = new Set(biopsias.map(b => b.anio_extraccion));
+    return Array.from(years).sort((a, b) => b - a);
+  }, [biopsias]);
+
   // Contadores
   const totalBiopsias = useMemo(() => {
     return getVialesCount();
@@ -104,9 +110,9 @@ export const TopBar: React.FC<TopBarProps> = ({ user, onNavigate }) => {
           <SelectContent>
             <SelectGroup>
               <SelectLabel>Año</SelectLabel>
-              <SelectItem value={new Date().getFullYear().toString()}>{new Date().getFullYear()}</SelectItem>
-              <SelectItem value={(new Date().getFullYear() - 1).toString()}>{new Date().getFullYear() - 1}</SelectItem>
-              <SelectItem value={(new Date().getFullYear() - 2).toString()}>{new Date().getFullYear() - 2}</SelectItem>
+              {aniosDisponibles.map(anio => (
+                <SelectItem key={anio} value={anio.toString()}>{anio}</SelectItem>
+              ))}
             </SelectGroup>
           </SelectContent>
         </Select>

@@ -75,6 +75,12 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
 
   const totalBiopsias = biopsias.length;
 
+  // Años disponibles basados en los datos cargados
+  const aniosDisponibles = useMemo(() => {
+    const years = new Set(biopsias.map(b => b.anio_extraccion));
+    return Array.from(years).sort((a, b) => a - b);
+  }, [biopsias]);
+
   // Filtrar biopsias
   const filteredBiopsias = useMemo(() => {
     if (!searchTerm && !selectedAnio && !selectedSexo) {
@@ -197,7 +203,7 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Año</label>
-              <Select 
+              <Select
                 value={selectedAnio?.toString() ?? ''}
                 onValueChange={(value) => setSelectedAnio(value ? Number(value) : null)}
               >
@@ -205,7 +211,7 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
                   <SelectValue placeholder="Seleccione un año" />
                 </SelectTrigger>
                 <SelectContent>
-                  {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
+                  {aniosDisponibles.map(year => (
                     <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                   ))}
                 </SelectContent>
@@ -295,7 +301,7 @@ export const BiopsiasView: React.FC<BiopsiasViewProps> = ({ onNewBiopsia }) => {
                   <SelectValue placeholder="Todos los años" />
                 </SelectTrigger>
                 <SelectContent>
-                  {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
+                  {aniosDisponibles.map(year => (
                     <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
                   ))}
                 </SelectContent>

@@ -49,6 +49,12 @@ export const ReportesView: React.FC = () => {
     localizacion: null as string | null,
     sexo: null as string | null
   });
+
+  // Años disponibles basados en los datos cargados
+  const aniosDisponibles = React.useMemo(() => {
+    const years = new Set(biopsias.map(b => b.anio_extraccion));
+    return Array.from(years).sort((a, b) => a - b);
+  }, [biopsias]);
   
   const [loading, setLoading] = useState(false);
 
@@ -181,7 +187,7 @@ export const ReportesView: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium mb-2">Año</label>
-            <Select 
+            <Select
               value={filters.anio?.toString() ?? ''}
               onValueChange={(value) => setFilters(prev => ({ ...prev, anio: value ? Number(value) : null }))}
             >
@@ -189,7 +195,7 @@ export const ReportesView: React.FC = () => {
                 <SelectValue placeholder="Seleccione un año" />
               </SelectTrigger>
               <SelectContent>
-                {[2020, 2021, 2022, 2023, 2024, 2025, 2026].map(year => (
+                {aniosDisponibles.map(year => (
                   <SelectItem key={year} value={year.toString()}>
                     {year}
                   </SelectItem>

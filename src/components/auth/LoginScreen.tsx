@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
+import logo from '@/assets/logo-banco-tumores.png';
 
 export const LoginScreen: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -36,11 +37,18 @@ export const LoginScreen: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Banco de Tumores INOR</CardTitle>
-          <CardDescription className="text-center">
-            Sistema de gestión de biopsias - Inicie sesión para continuar
-          </CardDescription>
-        </CardHeader>
+                  <div className="flex justify-center mb-4">
+                    <img
+                      src={logo}
+                      alt="Banco de Tumores INOR"
+                      className="w-20 h-20 object-contain"
+                    />
+                  </div>
+                  <CardTitle className="text-2xl font-bold text-center">Banco de Tumores INOR</CardTitle>
+                  <CardDescription className="text-center">
+                    Sistema de gestión de biopsias - Inicie sesión para continuar
+                  </CardDescription>
+                </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
