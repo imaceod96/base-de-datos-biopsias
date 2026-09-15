@@ -16,7 +16,7 @@ interface TopBarProps {
 }
 
 export const TopBar: React.FC<TopBarProps> = ({ user, onNavigate }) => {
-  const { session, usuarios, biopsias, viales, getVialesCount, getVialesTumoralesCount, getVialesNoTumoralesCount } = useAppContext();
+  const { session, usuarios, biopsias, viales, getVialesCount, getVialesTumoralesCount, getVialesNoTumoralesCount, logout } = useAppContext();
 
   // Filtros de búsqueda
   const [searchTerm, setSearchTerm] = React.useState('');
@@ -156,11 +156,11 @@ export const TopBar: React.FC<TopBarProps> = ({ user, onNavigate }) => {
       <div className="flex items-center gap-4">
         <span className="text-sm text-gray-600">Bienvenido, {user?.username}</span>
         <Button variant="ghost" size="sm" onClick={() => onNavigate('cuenta')}>
-          Mi cuenta
-        </Button>
-        <Button variant="destructive" size="sm" onClick={() => session?.role === 'admin' ? onNavigate('backup') : null}>
-          Cerrar sesión
-        </Button>
+                  Mi cuenta
+                </Button>
+                <Button variant="destructive" size="sm" onClick={logout}>
+                  Cerrar sesión
+                </Button>
       </div>
     </div>
   );

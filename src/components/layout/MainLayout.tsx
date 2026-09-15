@@ -50,7 +50,7 @@ const menuItems = [
 ];
 
 export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate, children }) => {
-  const { session, biopsias, viales, usuarios, historial } = useAppContext();
+  const { session, biopsias, viales, usuarios, historial, logout } = useAppContext();
   
   // Calcular contadores
   const totalBiopsias = biopsias.length;
@@ -195,13 +195,13 @@ export const MainLayout: React.FC<MainLayoutProps> = ({ currentView, onNavigate,
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => onNavigate('cuenta')}>
-                    <User className="mr-2 h-4 w-4" />
-                    Mi cuenta
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <LogOut className="mr-2 h-4 w-4" />
-                    Cerrar sesión
-                  </DropdownMenuItem>
+                                      <User className="mr-2 h-4 w-4" />
+                                      Mi cuenta
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem onClick={logout}>
+                                      <LogOut className="mr-2 h-4 w-4" />
+                                      Cerrar sesión
+                                    </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
