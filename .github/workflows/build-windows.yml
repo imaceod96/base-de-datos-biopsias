@@ -28,8 +28,11 @@ jobs:
       - name: Instalar dependencias
         run: pnpm install --frozen-lockfile
 
+      - name: Instalar Tauri CLI
+        run: pnpm add --global @tauri-apps/cli@2.11.4
+
       - name: Compilar aplicación Windows
-        run: pnpm tauri build
+        run: tauri build
 
       - name: Guardar instalador EXE
         uses: actions/upload-artifact@v4
