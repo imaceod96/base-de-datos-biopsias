@@ -110,7 +110,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
       newErrors.anioExtraccion = 'El año de extracción es obligatorio';
     } else {
       const year = parseInt(anioExtraccion);
-      const validation = CryptoUtils.validateYear(year);
+      const validation = ValidationUtils.validateYear(year);
       if (!validation.isValid) {
         newErrors.anioExtraccion = validation.error || 'Año inválido';
       }
