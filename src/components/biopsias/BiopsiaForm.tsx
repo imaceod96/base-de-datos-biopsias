@@ -90,7 +90,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
     if (!numeroBiopsia.trim()) {
       newErrors.numeroBiopsia = 'El número de biopsia es obligatorio';
     } else {
-      const validation = CryptoUtils.validateNumeroBiopsia(numeroBiopsia);
+      const validation = ValidationUtils.validateNumeroBiopsia(numeroBiopsia);
       if (!validation.isValid) {
         newErrors.numeroBiopsia = validation.error || 'Formato inválido';
       } else if (!isEditing) {
