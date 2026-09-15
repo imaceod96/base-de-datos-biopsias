@@ -49,6 +49,7 @@ interface AppContextType {
   // Operaciones de backup
   createCopiaSeguridad: (copia: CopiaSeguridad) => Promise<void>;
   getCopiasSeguridad: () => Promise<CopiaSeguridad[]>;
+  getFullState: () => Promise<AppState>;
   restoreFullState: (state: AppState) => Promise<void>;
 
   // Utilidades
@@ -229,6 +230,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return storageEngine.getCopiasSeguridad();
   }, []);
 
+  const getFullState = useCallback(async () => {
+    return storageEngine.getFullState();
+  }, []);
+
   const restoreFullState = useCallback(async (state: AppState) => {
     await storageEngine.restoreFullState(state);
     await refreshData();
@@ -297,6 +302,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     // Operaciones de backup
     createCopiaSeguridad,
     getCopiasSeguridad,
+    getFullState,
     restoreFullState,
     
     // Utilidades
@@ -314,7 +320,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     createNota, deleteNota,
     createUsuario, updateUsuario, deleteUsuario,
     addHistorialEntry,
-    createCopiaSeguridad, getCopiasSeguridad, restoreFullState,
+    createCopiaSeguridad, getCopiasSeguridad, getFullState, restoreFullState,
     getBiopsiasCount, getBiopsiasCountByLocalizacion,
     getVialesCount, getVialesTumoralesCount, getVialesNoTumoralesCount,
     refreshData,

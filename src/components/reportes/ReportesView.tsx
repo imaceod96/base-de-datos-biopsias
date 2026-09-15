@@ -297,7 +297,7 @@ export const ReportesView: React.FC = () => {
                     cy="50%"
                     labelLine={false}
                     label={({ name, value, percentage }) => 
-                      `${name}: ${value} (${percentage.toFixed(1)}%)`
+                      `${name}: ${value} (${(percentage ?? 0).toFixed(1)}%)`
                     }
                   >
                     {biopsiasPorLocalizacion.map((entry, index) => (
@@ -352,7 +352,7 @@ export const ReportesView: React.FC = () => {
                     cy="50%"
                     labelLine={false}
                     label={({ name, value, percentage }) => 
-                      `${name}: ${value} (${percentage.toFixed(1)}%)`
+                      `${name}: ${value} (${(percentage ?? 0).toFixed(1)}%)`
                     }
                   >
                     {biopsiasPorSexo.map((entry, index) => (
