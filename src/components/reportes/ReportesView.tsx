@@ -290,16 +290,16 @@ export const ReportesView: React.FC = () => {
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={biopsiasPorLocalizacion}
-                    dataKey="count"
-                    nameKey="localizacion"
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, value, percentage }) => 
-                      `${name}: ${value} (${percentage.toFixed(1)}%)`
-                    }
-                  >
+                                      data={biopsiasPorLocalizacion}
+                                      dataKey="count"
+                                      nameKey="localizacion"
+                                      cx="50%"
+                                      cy="50%"
+                                      labelLine={false}
+                                      label={({ name, value, percentage }) =>
+                                        `${name}: ${value} (${(percentage ?? 0).toFixed(1)}%)`
+                                      }
+                                    >
                     {biopsiasPorLocalizacion.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={getColor(entry.localizacion)} />
                     ))}
@@ -345,16 +345,16 @@ export const ReportesView: React.FC = () => {
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
                   <Pie
-                    data={biopsiasPorSexo}
-                    dataKey="count"
-                    nameKey="sexo"
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={({ name, value, percentage }) => 
-                      `${name}: ${value} (${percentage.toFixed(1)}%)`
-                    }
-                  >
+                                      data={biopsiasPorSexo}
+                                      dataKey="count"
+                                      nameKey="sexo"
+                                      cx="50%"
+                                      cy="50%"
+                                      labelLine={false}
+                                      label={({ name, value, percentage }) =>
+                                        `${name}: ${value} (${(percentage ?? 0).toFixed(1)}%)`
+                                      }
+                                    >
                     {biopsiasPorSexo.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={getSexColor(entry.sexo)} />
                     ))}
