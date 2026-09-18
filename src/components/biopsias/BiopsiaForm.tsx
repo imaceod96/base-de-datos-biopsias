@@ -78,6 +78,26 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
     }
   }, [anioExtraccion, biopsias, isEditing]);
 
+  // Auto-completar año cuando se completa el número de biopsia
+  useEffect(() => {
+    if (!isEditing && numeroBiopsia.trim()) {
+      const match = numeroBiopsia.match(/^B-(\d{2})-/);
+      if (match) {
+        const yearSuffix = parseInt(match[1]);
+        const currentYear = new Date().getFullYear();
+        const century = Math.floor(currentYear / 100) * 100;
+        let year = century + yearSuffix;
+        // Ajustar si el año calculado es futuro o muy antiguo
+        if (year > currentYear + 1) {
+          year -= 100;
+        }
+        if (!isNaN(year) && year >= 1900) {
+          setAnioExtraccion(year.toString());
+        }
+      }
+    }
+  }, [numeroBiopsia, isEditing]);
+
   // Mostrar/ocultar sub-localización
   useEffect(() => {
     setShowLocalizacionEspecifica(localizacion === 'Sistema_digestivo');
