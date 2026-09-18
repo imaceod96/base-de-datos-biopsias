@@ -50,6 +50,7 @@ export interface Nota {
   id: string;
   biopsia_id: string;
   usuario_id: string;
+  username: string;
   texto: string;
   fecha_creacion: string;
 }

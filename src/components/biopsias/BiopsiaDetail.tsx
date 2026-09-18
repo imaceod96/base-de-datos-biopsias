@@ -54,24 +54,25 @@ export const BiopsiaDetail: React.FC<BiopsiaDetailProps> = ({ biopsiaId, onBack,
   }
 
   // Añadir nota
-  const handleAddNote = async () => {
-    if (!newNoteText.trim()) {
-      toast({
-        title: 'Error',
-        description: 'El texto de la nota no puede estar vacío',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    try {
-      await createNota({
-        id: CryptoUtils.generateId(),
-        biopsia_id: biopsiaId,
-        usuario_id: session?.userId || '',
-        texto: newNoteText,
-        fecha_creacion: DateUtils.getCurrentDateTime(),
-      });
+    const handleAddNote = async () => {
+      if (!newNoteText.trim()) {
+        toast({
+          title: 'Error',
+          description: 'El texto de la nota no puede estar vacío',
+          variant: 'destructive',
+        });
+        return;
+      }
+  
+      try {
+        await createNota({
+          id: CryptoUtils.generateId(),
+          biopsia_id: biopsiaId,
+          usuario_id: session?.userId || '',
+          username: session?.username || '',
+          texto: newNoteText,
+          fecha_creacion: DateUtils.getCurrentDateTime(),
+        });
       
       await addHistorialEntry({
         usuario_id: session?.userId || '',
@@ -264,7 +265,7 @@ export const BiopsiaDetail: React.FC<BiopsiaDetailProps> = ({ biopsiaId, onBack,
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <User className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm font-medium">{nota.usuario_id}</span>
+                    <span className="text-sm font-medium">{nota.username || nota.usuario_id}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4 text-gray-400" />
