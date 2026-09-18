@@ -1,0 +1,42 @@
+name: Compilar Windows
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Descargar proyecto
+        uses: actions/checkout@v4
+
+      - name: Instalar pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 12.4.2
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Instalar Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Instalar dependencias
+        run: pnpm install --frozen-lockfile
+
+      - name: Instalar Tauri CLI
+        run: pnpm add --global @tauri-apps/cli@2.11.4
+
+      - name: Compilar aplicación Windows
+        run: tauri build
+
+      - name: Guardar instalador EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: Base-de-Datos-Biopsias-Windows
+          path: src-tauri/target/release/bundle/nsis/*.exe
+          if-no-files-found: error
