@@ -252,7 +252,12 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
   };
 
   return (
-    <Dialog open={true}>
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      if (!isOpen) {
+        setOpen(false);
+        onCancel();
+      }
+    }}>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>
