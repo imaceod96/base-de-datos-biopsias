@@ -45,6 +45,7 @@ export const BiopsiaForm: React.FC<BiopsiaFormProps> = ({ biopsiaId, onSave, onC
   const [vialesList, setVialesList] = useState<Array<{ id?: string; identificador: string; tipo: VialType }>>([]);
   const [showLocalizacionEspecifica, setShowLocalizacionEspecifica] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [open, setOpen] = useState(true);
 
   // Cargar datos si estamos editando
   useEffect(() => {
